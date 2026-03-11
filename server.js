@@ -1,6 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const passport = require("passport");
+const swaggerSpec = require("./docs/swagger");
+const swaggerUi = require("swagger-ui-express");
+const YAML = require("yamljs");
+
+const swaggerDocument = YAML.load("./docs/openapi.yaml");
 
 require("dotenv").config();
 
@@ -22,6 +27,7 @@ app.use("/auth", authRoutes);
 app.use("/products", productRoutes);
 app.use("/cart", cartRoutes);
 app.use("/orders", orderRoutes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get("/", (req, res) => {
  res.send("Welcome to the greenstore");
